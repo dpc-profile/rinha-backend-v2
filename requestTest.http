@@ -1,0 +1,59 @@
+###
+GET http://localhost:9999/contagem-pessoas
+
+###
+POST http://localhost:9999/pessoas
+Content-Type: application/json
+
+{
+    "nome": "Daniel",
+    "Apelido": "deniels",
+    "Nascimento": "1997-17-09",
+    "stack" : ["C#", "Python"]
+}
+
+###
+GET http://localhost:9999/pessoas?t=
+
+###
+GET http://localhost:9999/pessoas?t=py
+
+###
+GET http://localhost:9999/pessoas/
+
+#==========================================================================
+###
+GET http://localhost:5229/contagem-pessoas
+
+###
+GET http://localhost:5229/pessoas/7b5e2139-9e63-4db5-83f4-6bf696cb2b63
+
+###
+GET http://localhost:5229/pessoas/1
+
+###
+GET http://localhost:5229/pessoas?t=bia
+
+###
+GET http://localhost:5229/pessoas?t=
+
+###
+POST http://localhost:5229/pessoas
+Content-Type: application/json
+
+{
+    "nome": "Daniel",
+    "Apelido": "deniels",
+    "Nascimento": "1997-17-09",
+    "stack" : ["C#", "Python"]
+}
+
+###
+POST http://localhost:5229/pessoas
+Content-Type: application/json
+
+{
+    "nome": "Beatriz",
+    "apelido": "bia",
+    "Nascimento": "1985-13-09"
+}
