@@ -9,7 +9,11 @@ services:
     depends_on:
       - db
     environment:
-      ConnectionStrings__postgresql: "User ID=admin;Password=123;Server=db;Port=5432;Database=rinha;"
+      # - DbConn=User ID=admin;Password=123;Server=db;Port=5432;Database=rinha;
+      #Tem que ver se funciona
+      - ConnectionStrings__DbConn=Host=db;Username=admin;Password=123;Database=rinha;Connection Pruning Interval=1;Connection Idle Lifetime=2; 
+
+      #https://learn.microsoft.com/en-us/dotnet/core/runtime-config/garbage-collector
     ports:
       - "80:80"
     expose:

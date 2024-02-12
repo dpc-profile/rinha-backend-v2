@@ -3,5 +3,5 @@ CREATE TABLE public.pessoas (
 	apelido VARCHAR(32) UNIQUE NOT NULL,
 	nome VARCHAR(100) NOT NULL,
 	nascimento DATE NOT NULL,
-	stack TEXT NULL,
+	stack TEXT NULL
 );
