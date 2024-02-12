@@ -34,7 +34,6 @@ app.MapPost("/pessoas", async (IDatabase cache,
     if (pessoaModelValid == false)
         Results.UnprocessableEntity("Os dados da requisição estão invalidos");
 
-    // apelido já cadastrado 422 - Unprocessable Entity/Content
     RedisValue apelidoUsado = await cache.StringGetAsync(pessoaModel.Apelido);
     if (!apelidoUsado.IsNull)
         return Results.UnprocessableEntity("Apelido já cadastrado");
@@ -52,8 +51,19 @@ app.MapPost("/pessoas", async (IDatabase cache,
     return Results.Created($"/pessoas/{pessoaModel.Id}", pessoaModel);
 });
 
-app.MapGet("/pessoas/{id}", () => {
-    return Results.Ok();
+app.MapGet("/pessoas/{id}", async (IDatabase cache, string id) => {
+
+    if(!Guid.TryParse(id, out _))
+        return Results.BadRequest("uuid invalido.");
+
+    var cachedPessoa = await cache.StringGetAsync(id);
+
+    if (cachedPessoa.IsNull)
+        return Results.NotFound();
+    
+    PessoaModel pessoa = JsonSerializer.Deserialize<PessoaModel>(cachedPessoa);
+
+    return Results.Ok(pessoa);
 });
 
 app.MapGet("pessoas", (string? t) => {
