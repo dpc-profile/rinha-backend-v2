@@ -12,6 +12,7 @@ services:
       # - DbConn=User ID=admin;Password=123;Server=db;Port=5432;Database=rinha;
       #Tem que ver se funciona
       - ConnectionStrings__DbConn=Host=db;Username=admin;Password=123;Database=rinha;Connection Pruning Interval=1;Connection Idle Lifetime=2; 
+      - ConnectionStrings__CacheConn=cache
 
       #https://learn.microsoft.com/en-us/dotnet/core/runtime-config/garbage-collector
     ports:
@@ -60,6 +61,22 @@ services:
         limits:
           cpus: "4"
           memory: "4GB"
+
+  cache:
+    hostname: cache-redis
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1GB"
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: "0.06"
+    #       memory: "0.5GB"
   
 networks:
   default:
