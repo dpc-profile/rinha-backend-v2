@@ -13,4 +13,4 @@ COPY --from=build /app ./
 # Expose sendo feito no docker-compose
 # EXPOSE 80 
 
-ENTRYPOINT ["dotnet", "Api.dll"]
+ENTRYPOINT ["dotnet", "rinha-bachend-v2.dll"]

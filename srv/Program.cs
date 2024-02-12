@@ -24,8 +24,7 @@ builder.Services.AddSingleton<IDatabase>(_ => redis.GetDatabase());
 
 var app = builder.Build();
 
-app.MapPost("/pessoas", async (
-    IDatabase cache, 
+app.MapPost("/pessoas", async (IDatabase cache, 
     ConcurrentQueue<PessoaModel> processingQueue, 
     PessoaModel pessoaModel) =>
 {
@@ -51,6 +50,22 @@ app.MapPost("/pessoas", async (
     processingQueue.Enqueue(pessoaModel);
 
     return Results.Created($"/pessoas/{pessoaModel.Id}", pessoaModel);
+});
+
+app.MapGet("/pessoas/{id}", () => {
+    return Results.Ok();
+});
+
+app.MapGet("pessoas", (string? t) => {
+
+    if (string.IsNullOrEmpty(t))
+        return Results.BadRequest("Termo de pesquisa não pode ser vazio.");
+
+    return Results.Ok();
+});
+
+app.MapGet("/contagem-pessoas", () => {
+    return 6.5;
 });
 
 
