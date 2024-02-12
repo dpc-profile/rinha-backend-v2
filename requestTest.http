@@ -23,7 +23,15 @@ GET http://localhost:9999/pessoas/
 
 #==========================================================================
 ###
-GET http://localhost:5229/pessoas
+POST http://localhost:5229/pessoas
+Content-Type: application/json
+
+{
+    "nome": "Daniel",
+    "Apelido": "deniels",
+    "Nascimento": "1997-17-09",
+    "stack" : ["C#", "Python"]
+}
 
 #==========================================================================
 ###

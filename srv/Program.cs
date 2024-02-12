@@ -9,5 +9,12 @@ builder.Services.AddHostedService<InserePessoas>();
 
 var app = builder.Build();
 
+app.MapPost("/pessoas", async (PessoaModel pessoaModel) =>
+{
+
+    return Results.Ok();
+});
+
+
 app.Run();
 
