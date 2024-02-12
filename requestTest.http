@@ -8,7 +8,7 @@ Content-Type: application/json
 {
     "nome": "Daniel",
     "Apelido": "deniels",
-    "Nascimento": "1997-17-09",
+    "Nascimento": "1997-09-17",
     "stack" : ["C#", "Python"]
 }
 
@@ -29,7 +29,7 @@ Content-Type: application/json
 {
     "nome": "Daniel",
     "Apelido": "deniels",
-    "Nascimento": "1997-17-09",
+    "Nascimento": "1997-09-17",
     "stack" : ["C#", "Python"]
 }
 
@@ -56,7 +56,7 @@ Content-Type: application/json
 {
     "nome": "Daniel",
     "Apelido": "deniels",
-    "Nascimento": "1997-17-09",
+    "Nascimento": "1997-09-17",
     "stack" : ["C#", "Python"]
 }
 
@@ -67,5 +67,5 @@ Content-Type: application/json
 {
     "nome": "Beatriz",
     "apelido": "bia",
-    "Nascimento": "1985-13-09"
+    "Nascimento": "1985-09-23"
 }

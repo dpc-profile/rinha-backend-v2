@@ -6,14 +6,14 @@ public class PessoaModel
     public Guid? Id { get; set; }
     public string? Apelido { get; set; }
     public string? Nome { get; set; }
-    public string? Nascimento { get; set; }
+    public DateOnly? Nascimento { get; set; }
     public IEnumerable<string>? Stack { get; set; }
 
     public int Validacao()
     {
         if (string.IsNullOrEmpty(Nome) || Nome.Length > 100 
             || string.IsNullOrEmpty(Apelido) || Apelido.Length > 32 
-            || string.IsNullOrEmpty(Nascimento))
+            || !Nascimento.HasValue)
             return 1;
 
         foreach (string item in Stack ?? Enumerable.Empty<string>())

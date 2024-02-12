@@ -10,7 +10,6 @@ public class InserePessoas : BackgroundService
     private readonly NpgsqlConnection _conn;
     private readonly ILogger<InserePessoas> _logger;
 
-    private PessoaModel _pessoaModel;
     public InserePessoas(NpgsqlConnection conn, ILogger<InserePessoas> logger)
     {
         _conn = conn;
