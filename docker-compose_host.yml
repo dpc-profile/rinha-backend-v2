@@ -1,0 +1,91 @@
+version: "3.9"
+services:
+  api1: &api # API - Instância 01
+    # build:
+    #   context: .
+    #   dockerfile: srv/Dockerfile
+    image: dpcprofile/rinha_csharp_v2:latest
+    hostname: api1
+    depends_on:
+      - db
+      - cache
+    environment:
+      - ASPNETCORE_URLS=http://*:8081
+      #https://learn.microsoft.com/en-us/dotnet/core/runtime-config/garbage-collector
+    expose:
+      - "8081"
+    ports:
+      - "8081:80"
+    network_mode: host
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: "2GB"
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: "0.45"
+    #       memory: "0.250GB"
+
+  api2: # API - Instância 02
+    <<: *api
+    hostname: api2
+    environment:
+      - ASPNETCORE_URLS=http://*:8082
+    expose:
+      - "8082"
+    ports:
+      - "8082:80"
+
+  nginx: # Load Balancer
+    image: nginx:alpine
+    volumes:
+      - ./config/nginx_host.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api1
+      - api2
+    ports:
+      - "9999:9999"
+    network_mode: host
+    deploy:
+      resources:
+        limits:
+          cpus: "0.10"
+          memory: "0.1GB"
+  
+  db:
+    image: postgres:16-alpine
+    hostname: db
+    command: postgres -c 'max_connections=200'
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=rinha
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    network_mode: host
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: "4GB"
+
+  cache:
+    hostname: cache-redis
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    network_mode: host
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1GB"
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: "0.06"
+    #       memory: "0.5GB"
