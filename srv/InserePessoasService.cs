@@ -1,16 +1,14 @@
 
-using Microsoft.VisualBasic;
-
 using Npgsql;
 
 namespace RinhaBachendV2;
 
-public class InserePessoas : BackgroundService
+public class InserePessoasService : BackgroundService
 {
     private readonly NpgsqlConnection _conn;
-    private readonly ILogger<InserePessoas> _logger;
+    private readonly ILogger<InserePessoasService> _logger;
 
-    public InserePessoas(NpgsqlConnection conn, ILogger<InserePessoas> logger)
+    public InserePessoasService(NpgsqlConnection conn, ILogger<InserePessoasService> logger)
     {
         _conn = conn;
         _logger = logger;
@@ -34,6 +32,8 @@ public class InserePessoas : BackgroundService
                 await Task.Delay(5_000);
             }
         }
+
+        // Adicionar PublishAsync("busca") aqui em caso de overhead no endpoint POST /pessoa
 
     }
 }
