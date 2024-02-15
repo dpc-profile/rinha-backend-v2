@@ -36,7 +36,7 @@ app.MapPost("/pessoas", async (IDatabase cache,
 
     // Fazer um try/catch com as mensagens mais exatas e ver no que dá
     if (pessoaModelValid == false)
-        Results.UnprocessableEntity("Os dados da requisição estão invalidos");
+        return Results.UnprocessableEntity("Os dados da requisição estão invalidos");
 
     RedisValue apelidoUsado = await cache.StringGetAsync(pessoaModel.Apelido);
     if (!apelidoUsado.IsNull)
@@ -52,12 +52,7 @@ app.MapPost("/pessoas", async (IDatabase cache,
     await cache.StringSetAsync(redisPayload.ToArray());
     processingQueue.Enqueue(pessoaModel);
 
-    // Adiciona no ConcurrentDict uma key com os campos que são usado na consulta, e o pessoaModel como valor
-    // string buscaStack = pessoaModel.Stack == null ? "" : string.Join("", pessoaModel.Stack.Select(s => s.ToString()));
-    // string buscaKeyValue = $"{pessoaModel.Apelido}{pessoaModel.Nome}{buscaStack}";
-    // pessoaMap.TryAdd(buscaKeyValue, pessoaModel);
-
-    // await cache.PublishAsync("busca", JsonSerializer.Serialize<PessoaModel>(pessoaModel), CommandFlags.FireAndForget);
+    await cache.PublishAsync("busca", JsonSerializer.Serialize<PessoaModel>(pessoaModel), CommandFlags.FireAndForget);
 
     return Results.Created($"/pessoas/{pessoaModel.Id}", pessoaModel);
 });
