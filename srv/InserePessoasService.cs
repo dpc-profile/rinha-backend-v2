@@ -13,17 +13,14 @@ public class InserePessoasService : BackgroundService
     private readonly NpgsqlConnection _conn;
     private readonly ILogger<InserePessoasService> _logger;
     ConcurrentQueue<PessoaModel> _queue;
-    private readonly IDatabase _cache;
 
     public InserePessoasService(NpgsqlConnection conn,
         ILogger<InserePessoasService> logger,
-        ConcurrentQueue<PessoaModel> queue,
-        IDatabase cache)
+        ConcurrentQueue<PessoaModel> queue)
     {
         _conn = conn;
         _logger = logger;
         _queue = queue;
-        _cache = cache;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -62,7 +59,6 @@ public class InserePessoasService : BackgroundService
             try
             {
                 var batch = _conn.CreateBatch();
-                // var batchCommands = new List<NpgsqlBatchCommand>();
 
                 foreach (var p in listaPessoa)
                 {
@@ -79,21 +75,14 @@ public class InserePessoasService : BackgroundService
                     batchCmd.Parameters.AddWithValue(p.Stack == null ? DBNull.Value : p.Stack.Select(s => s.ToString()).ToArray());
                     batch.BatchCommands.Add(batchCmd);
 
-
-                    var buscaStackValue = p.Stack == null ? "" : string.Join("", p.Stack.Select(s => s.ToString()));
-                    var buscaValue = $"{p.Apelido}{p.Nome}{buscaStackValue}" ?? "";
-                    await _cache.PublishAsync("busca", JsonSerializer.Serialize<PessoaModel>(p), CommandFlags.FireAndForget);
-
                 }
 
                 await batch.ExecuteNonQueryAsync();
             }
             catch (Exception error)
             {
-                _logger.LogError("Erro não esperado ao inserir pessoas no db.", error);
+                _logger.LogError(message:"Erro não esperado ao inserir pessoas no db.", exception: error);
             }
-
-            // Adicionar PublishAsync("busca") aqui em caso de overhead no endpoint POST /pessoa
 
         }
 
