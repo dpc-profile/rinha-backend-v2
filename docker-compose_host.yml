@@ -13,7 +13,7 @@ services:
       - ASPNETCORE_URLS=http://*:8081
 
       #https://learn.microsoft.com/en-us/dotnet/core/runtime-config/garbage-collector
-      # - DOTNET_GCConserveMemory=1
+    #   - DOTNET_GCConserveMemory=1
       # - DOTNET_gcConcurrent=0
     expose:
       - "8081"
@@ -23,13 +23,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "2"
-          memory: "2GB"
-    # deploy:
-    #   resources:
-    #     limits:
-    #       cpus: "0.45"
-    #       memory: "0.250GB"
+          cpus: "0.60"
+          memory: "0.800GB"
 
   api2: # API - Instância 02
     <<: *api
@@ -55,7 +50,7 @@ services:
       resources:
         limits:
           cpus: "0.10"
-          memory: "0.1GB"
+          memory: "0.100GB"
   
   db:
     image: postgres:16-alpine
@@ -73,8 +68,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "4"
-          memory: "4GB"
+          cpus: "0.40"
+          memory: "0.800GB"
 
   cache:
     hostname: cache-redis
@@ -85,10 +80,5 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "1"
-          memory: "1GB"
-    # deploy:
-    #   resources:
-    #     limits:
-    #       cpus: "0.06"
-    #       memory: "0.5GB"
+          cpus: "0.10"
+          memory: "0.500GB"
