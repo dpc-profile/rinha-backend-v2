@@ -4,3 +4,5 @@ O intuito do projeto é inteiramente aprendizado proprío, tentando aplicar toda
 
 
 Projeto usado como base: https://github.com/zanfranceschi/rinha-de-backend-2023-q3-csharp
+
+Implementação com NATS: https://github.com/andr3marra/rinha-de-backend-2023-q3-csharp

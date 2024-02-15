@@ -25,7 +25,6 @@ public class AtualizaConcurrentDictService : BackgroundService
     {
         await _subscriber.SubscribeAsync("busca", async (channel, message) =>
         {
-            _logger.LogInformation("Populando o ConcurrentDictionary");
             var pessoa = JsonSerializer.Deserialize<PessoaModel>(message);
 
             // Adiciona no ConcurrentDict uma key com os campos que são usado na consulta, e o pessoaModel como valor

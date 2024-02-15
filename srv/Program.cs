@@ -3,6 +3,7 @@ using RinhaBachendV2;
 using System.Collections.Concurrent;
 using StackExchange.Redis;
 using System.Text.Json;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,7 @@ builder.Services.AddNpgsqlDataSource(dbString ?? "ERRO de connection string!!!")
 string cacheString = builder.Configuration.GetConnectionString("CacheConn");
 
 
-// builder.Services.AddHostedService<InserePessoasService>();
+builder.Services.AddHostedService<InserePessoasService>();
 builder.Services.AddHostedService<AtualizaConcurrentDictService>();
 
 builder.Services.AddSingleton(_ => new ConcurrentDictionary<string, PessoaModel>());
@@ -52,9 +53,11 @@ app.MapPost("/pessoas", async (IDatabase cache,
     processingQueue.Enqueue(pessoaModel);
 
     // Adiciona no ConcurrentDict uma key com os campos que são usado na consulta, e o pessoaModel como valor
-    string buscaStack = pessoaModel.Stack == null ? "" : string.Join("", pessoaModel.Stack.Select(s => s.ToString()));
-    string buscaKeyValue = $"{pessoaModel.Apelido}{pessoaModel.Nome}{buscaStack}";
-    pessoaMap.TryAdd(buscaKeyValue, pessoaModel);
+    // string buscaStack = pessoaModel.Stack == null ? "" : string.Join("", pessoaModel.Stack.Select(s => s.ToString()));
+    // string buscaKeyValue = $"{pessoaModel.Apelido}{pessoaModel.Nome}{buscaStack}";
+    // pessoaMap.TryAdd(buscaKeyValue, pessoaModel);
+
+    // await cache.PublishAsync("busca", JsonSerializer.Serialize<PessoaModel>(pessoaModel), CommandFlags.FireAndForget);
 
     return Results.Created($"/pessoas/{pessoaModel.Id}", pessoaModel);
 });
@@ -86,9 +89,16 @@ app.MapGet("pessoas", (ConcurrentDictionary<string, PessoaModel> pessoaMap, stri
     return Results.Ok(pessoa);
 });
 
-app.MapGet("/contagem-pessoas", () =>
+app.MapGet("/contagem-pessoas", async (NpgsqlConnection conn) =>
 {
-    return 6.5;
+    await using (conn)
+    {
+        await conn.OpenAsync();
+        await using var cmd = conn.CreateCommand();
+        cmd.CommandText = "select count(1) from pessoas";
+        var count = await cmd.ExecuteScalarAsync();
+        return count;
+    }
 });
 
 
