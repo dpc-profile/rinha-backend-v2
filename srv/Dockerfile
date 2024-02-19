@@ -1,5 +1,3 @@
-#dpcprofile/rinha_csharp_v2:latest
-
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /source
 COPY . ./
@@ -13,4 +11,4 @@ COPY --from=build /app ./
 # Expose sendo feito no docker-compose
 # EXPOSE 80 
 
-ENTRYPOINT ["dotnet", "Api.dll"]
+ENTRYPOINT ["dotnet", "rinha-bachend-v2.dll"]
