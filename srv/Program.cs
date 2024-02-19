@@ -8,7 +8,7 @@ using Npgsql;
 var builder = WebApplication.CreateBuilder(args);
 
 string dbString = builder.Configuration.GetConnectionString("DbConn");
-builder.Services.AddNpgsqlDataSource(dbString ?? "ERRO de connection string!!!");
+builder.Services.AddNpgsqlDataSource(dbString);
 
 string cacheString = builder.Configuration.GetConnectionString("CacheConn");
 
@@ -32,9 +32,8 @@ app.MapPost("/pessoas", async (IDatabase cache,
     IConnectionMultiplexer multiplexer,
     PessoaModel pessoaModel) =>
 {
-    bool pessoaModelValid = pessoaModel.IsValid();
 
-    // Fazer um try/catch com as mensagens mais exatas e ver no que dá
+    bool pessoaModelValid = pessoaModel.IsValid();
     if (pessoaModelValid == false)
         return Results.UnprocessableEntity("Os dados da requisição estão invalidos");
 
@@ -43,6 +42,7 @@ app.MapPost("/pessoas", async (IDatabase cache,
         return Results.UnprocessableEntity("Apelido já cadastrado");
 
     pessoaModel.Id = Guid.NewGuid();
+    
     var redisPayload = new List<KeyValuePair<RedisKey, RedisValue>>
     {
         new KeyValuePair<RedisKey, RedisValue>(new RedisKey(pessoaModel.Id.ToString()), new RedisValue(JsonSerializer.Serialize(pessoaModel))),

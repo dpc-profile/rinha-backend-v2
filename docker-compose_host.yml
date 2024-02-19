@@ -12,18 +12,14 @@ services:
     environment:
       - ASPNETCORE_URLS=http://*:8081
 
-      #https://learn.microsoft.com/en-us/dotnet/core/runtime-config/garbage-collector
-    #   - DOTNET_GCConserveMemory=1
-      # - DOTNET_gcConcurrent=0
-    expose:
-      - "8081"
-    ports:
-      - "8081:80"
+    # Realmente não precisa disso???
+    # expose:
+    #   - "8081"
     network_mode: host
     deploy:
       resources:
         limits:
-          cpus: "0.60"
+          cpus: "0.50"
           memory: "0.800GB"
 
   api2: # API - Instância 02
@@ -31,10 +27,8 @@ services:
     hostname: api2
     environment:
       - ASPNETCORE_URLS=http://*:8082
-    expose:
-      - "8082"
-    ports:
-      - "8082:80"
+    # expose:
+    #   - "8082"
 
   nginx: # Load Balancer
     image: nginx:alpine
@@ -68,7 +62,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.40"
+          cpus: "0.30"
           memory: "0.800GB"
 
   cache:
@@ -82,3 +76,14 @@ services:
         limits:
           cpus: "0.10"
           memory: "0.500GB"
+
+  # pgadmin: #Apenas para debug
+  #   image: dpage/pgadmin4
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+  #     PGADMIN_DEFAULT_PASSWORD: "admin"
+  #   ports:
+  #     - "5555:80"
+  #   depends_on:
+  #     - db
+  #   network_mode: host

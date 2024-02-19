@@ -1,10 +1,6 @@
 
 using System.Collections.Concurrent;
-using System.Text.Json;
-
 using Npgsql;
-
-using StackExchange.Redis;
 
 namespace RinhaBachendV2;
 
@@ -12,7 +8,7 @@ public class InserePessoasService : BackgroundService
 {
     private readonly NpgsqlConnection _conn;
     private readonly ILogger<InserePessoasService> _logger;
-    ConcurrentQueue<PessoaModel> _queue;
+    private readonly ConcurrentQueue<PessoaModel> _queue;
 
     public InserePessoasService(NpgsqlConnection conn,
         ILogger<InserePessoasService> logger,

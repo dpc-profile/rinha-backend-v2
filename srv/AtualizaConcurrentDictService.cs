@@ -6,19 +6,16 @@ namespace RinhaBachendV2;
 
 public class AtualizaConcurrentDictService : BackgroundService
 {
-    private readonly ILogger<AtualizaConcurrentDictService> _logger;
     private readonly ConcurrentDictionary<string, PessoaModel> _pessoaMap;
     private readonly IConnectionMultiplexer _multiplexer;
     private readonly ISubscriber _subscriber;
 
     public AtualizaConcurrentDictService(IConnectionMultiplexer multiplexer,
-        ConcurrentDictionary<string, PessoaModel> pessoaMap,
-        ILogger<AtualizaConcurrentDictService> logger)
+        ConcurrentDictionary<string, PessoaModel> pessoaMap)
     {
         _pessoaMap = pessoaMap;
         _multiplexer = multiplexer;
         _subscriber = _multiplexer.GetSubscriber();
-        _logger = logger;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)

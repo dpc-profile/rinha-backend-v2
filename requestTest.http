@@ -1,8 +1,11 @@
-###
-GET http://localhost:9999/contagem-pessoas
+@producao = http://localhost:9999
+@desenv = http://localhost:5229
 
 ###
-POST http://localhost:9999/pessoas
+GET {{producao}}/contagem-pessoas
+
+###
+POST {{producao}}/pessoas
 Content-Type: application/json
 
 {
@@ -13,44 +16,42 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:9999/pessoas?t=
+POST {{producao}}/pessoas
+Content-Type: application/json
+
+{
+    "nome": "Beatriz",
+    "apelido": "bia",
+    "Nascimento": "1985-09-23"
+}
 
 ###
-GET http://localhost:9999/pessoas?t=py
+GET {{producao}}/pessoas?t=
 
 ###
-GET http://localhost:9999/pessoas/238f77cc-4fbf-4adf-896b-86b677bf3139
+GET {{producao}}/pessoas?t=Py
+
+###
+GET {{producao}}/pessoas/238f77cc-4fbf-4adf-896b-86b677bf3139
 
 #==========================================================================
 ###
-POST http://localhost:5229/pessoas
-Content-Type: application/json
-
-{
-    "nome": "Daniel",
-    "Apelido": "deniels",
-    "Nascimento": "1997-09-17",
-    "stack" : ["C#", "Python"]
-}
-
-#==========================================================================
-###
-GET http://localhost:5229/contagem-pessoas
+GET {{desenv}}/contagem-pessoas
 
 ###
-GET http://localhost:5229/pessoas/1c076a85-22ff-4cf1-b156-b2f063a787c9
+GET {{desenv}}/pessoas/1c076a85-22ff-4cf1-b156-b2f063a787c9
 
 ###
-GET http://localhost:5229/pessoas/1
+GET {{desenv}}/pessoas/1
 
 ###
-GET http://localhost:5229/pessoas?t=Py
+GET {{desenv}}/pessoas?t=Py
 
 ###
-GET http://localhost:5229/pessoas?t=
+GET {{desenv}}/pessoas?t=
 
 ###
-POST http://localhost:5229/pessoas
+POST {{desenv}}/pessoas
 Content-Type: application/json
 
 {
@@ -61,7 +62,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:5229/pessoas
+POST {{desenv}}/pessoas
 Content-Type: application/json
 
 {
